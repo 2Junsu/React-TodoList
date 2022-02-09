@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,10 +18,12 @@ const CompletedTodo = (props) => {
   const deadlineMilli = Date.parse(data.deadline)
   const nowMilli = new Date().getTime()
 
+  const [isSoon, setIsSoon] = useState(false) //마감일이 3일 이내인지 여부
+
   const untilDeadline = () => {
     //마감 목표일이 3일 이내면 빨간색으로 표시
     let time = deadlineMilli - nowMilli
-    if (time <= 259200000) $(`#${id}`).css('border', '2px solid red')
+    if (time <= 259200000) setIsSoon(true)
   }
   setInterval(untilDeadline, 1000)
 
@@ -41,7 +43,12 @@ const CompletedTodo = (props) => {
   }
 
   return (
-    <Wrap id={id} completeColor={props.completeColor} check={check}>
+    <Wrap
+      id={id}
+      completeColor={props.completeColor}
+      check={check}
+      isSoon={isSoon}
+    >
       <Container>
         <Left>
           <TitleDeadline>
@@ -80,7 +87,8 @@ const Wrap = styled.div`
   display: flex;
   flex-direction: column;
   border: 2px solid
-    ${(props) => (props.check ? props.completeColor : 'skyblue')};
+    ${(props) =>
+      props.check ? props.completeColor : props.isSoon ? 'red' : 'skyblue'};
   color: ${(props) => (props.check ? props.completeColor : 'black')};
   border-radius: 8px;
   width: 700px;
