@@ -1,4 +1,5 @@
 import Todo from './Todo'
-import Modal from './Modal'
+import TagModal from './TagModal'
 import CompletedTodo from './CompletedTodo'
-export { Todo, Modal, CompletedTodo }
+import Modal from './Modal'
+export { Todo, TagModal, CompletedTodo, Modal }

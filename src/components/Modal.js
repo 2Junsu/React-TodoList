@@ -1,83 +1,44 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import ModalComponent from 'react-modal'
-import { SketchPicker } from 'react-color'
-import $ from 'jquery'
+import { useDispatch } from 'react-redux'
+import { changeModal } from '../redux/reducer/todo'
 import { Button } from '../elements'
-import { useDispatch, useSelector } from 'react-redux'
-import { changeModal, addTag } from '../redux/reducer/todo'
 
-const Modal = () => {
+const Modal = (props) => {
   const dispatch = useDispatch()
-  const modalOpen = useSelector((state) => state.reducer.modalOpen)
+  const modalOpen = props.modalOpen
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
 
-  const [tagName, setTagName] = useState('')
-  const [bgColor, setBgColor] = useState('white')
-  const [fontColor, setFontColor] = useState('black')
-
-  const [bgPaletteClicked, setBgPaletteClicked] = useState(false)
-  const [fontPaletteClicked, setFontPaletteClicked] = useState(false)
-
-  const handleTagName = (name) => {
-    //태그명 관리
-    setTagName(name.target.value)
-  }
-
-  const handleBgColor = (color) => {
-    //배경색 관리
-    setBgColor(color.hex)
-  }
-
-  const handleFontColor = (color) => {
-    //글자색 관리
-    setFontColor(color.hex)
-  }
-
-  const openBgPalette = () => {
-    //배경색 지정 팔레트 open
-    setBgPaletteClicked(!bgPaletteClicked)
-  }
-
-  const openFontPalette = () => {
-    //글자색 지정 팔레트 open
-    setFontPaletteClicked(!fontPaletteClicked)
-  }
+  const width = props.width
+  const height = props.height
 
   const closeModal = () => {
-    //modal창 close
-    dispatch(changeModal(false))
-    setBgPaletteClicked(false)
-    setFontPaletteClicked(false)
+    dispatch(changeModal({ state: false, type: props.type }))
+    setTitle('')
+    setContent('')
   }
 
   const onsubmit = () => {
-    dispatch(
-      addTag({
-        name: tagName,
-        fontColor,
-        bgColor,
-        date: new Date().toLocaleString(),
-        id: new Date().getTime(),
-      }),
-    )
+    //유효성 검증 후 제목 및 상세설명 변경
+    if (props.type === 'title') {
+      if (title === '') alert('제목을 입력하세요.')
+      else localStorage.setItem('changeTitle', title)
+    } else {
+      if (content === '') alert('상세설명을 입력하세요.')
+      else localStorage.setItem('changeContent', content)
+    }
     closeModal()
   }
 
-  useEffect(() => {
-    //배경색 지정 팔레트와 글자색 지정 팔레트가 중복해서 열리지 않게 구현
-    if (bgPaletteClicked) {
-      if (fontPaletteClicked) setFontPaletteClicked(false)
-      $('#bgPalette').show()
-    } else $('#bgPalette').hide()
-  }, [bgPaletteClicked])
+  const handleTitle = (e) => {
+    setTitle(e.target.value)
+  }
 
-  useEffect(() => {
-    //배경색 지정 팔레트와 글자색 지정 팔레트가 중복해서 열리지 않게 구현
-    if (fontPaletteClicked) {
-      if (bgPaletteClicked) setBgPaletteClicked(false)
-      $('#fontPalette').show()
-    } else $('#fontPalette').hide()
-  }, [fontPaletteClicked])
+  const handleContent = (e) => {
+    setContent(e.target.value)
+  }
 
   return (
     <ModalComponent
@@ -90,78 +51,71 @@ const Modal = () => {
           left: 0,
         },
         content: {
-          position: 'relative',
+          position: 'absolute',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          top: 'calc(50% - 250px)',
-          left: 'calc(50% - 150px)',
-          width: 300,
-          height: 500,
+          justifyContent: 'center',
+          top: `calc(50% - ${height / 2}px)`,
+          left: `calc(50% - ${width / 2}px)`,
+          width: width + 'px',
+          height: height + 'px',
           borderRadius: 8,
           border: '3px solid skyblue',
           backgroundColor: 'white',
         },
       }}
     >
-      <Name onChange={handleTagName} autoFocus />
-      <Buttons>
-        <Button margin="30px 10px" onClick={openBgPalette}>
-          배경 색상
-        </Button>
-        <Button margin="30px 10px" onClick={openFontPalette}>
-          글자 색상
-        </Button>
-      </Buttons>
-      <OpenBgPalette id="bgPalette">
-        {bgPaletteClicked && (
-          <SketchPicker
-            width="200px"
-            disableAlpha={true}
-            color={bgColor}
-            onChangeComplete={handleBgColor}
+      {props.type === 'title' ? (
+        <Container>
+          <Title type="text" placeholder="할 일 제목" onChange={handleTitle} />
+          <Btns>
+            <Button margin="10px" onClick={onsubmit}>
+              변경
+            </Button>
+            <Button margin="10px" onClick={closeModal}>
+              취소
+            </Button>
+          </Btns>
+        </Container>
+      ) : (
+        <Container>
+          <Content
+            type="text"
+            placeholder="할 일 상세설명"
+            onChange={handleContent}
           />
-        )}
-      </OpenBgPalette>
-      <OpenFontPalette id="fontPalette">
-        {fontPaletteClicked && (
-          <SketchPicker
-            width="200px"
-            disableAlpha={true}
-            color={fontColor}
-            onChangeComplete={handleFontColor}
-          />
-        )}
-      </OpenFontPalette>
-      <BottomBtns>
-        <Button margin="30px 10px" onClick={onsubmit}>
-          추가
-        </Button>
-        <Button margin="30px 10px" onClick={closeModal}>
-          닫기
-        </Button>
-      </BottomBtns>
+          <Btns>
+            <Button margin="10px" onClick={onsubmit}>
+              변경
+            </Button>
+            <Button margin="10px" onClick={closeModal}>
+              취소
+            </Button>
+          </Btns>
+        </Container>
+      )}
     </ModalComponent>
   )
 }
-
-const Name = styled.input`
-  width: 80%;
-  font-size: 20px;
-  padding: 10px;
-  border: 2px solid skyblue;
-  border-radius: 8px;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
-const Buttons = styled.div`
+const Btns = styled.div`
   display: flex;
 `
-const BottomBtns = styled(Buttons)`
-  position: absolute;
-  bottom: 0;
+const Title = styled.input`
+  font-size: 20px;
+  padding: 8px 16px;
+  width: 500px;
 `
-const OpenBgPalette = styled.div`
-  position: absolute;
-  top: 150px;
+const Content = styled.textarea`
+  font-size: 16px;
+  padding: 8px 16px;
+  width: 500px;
+  height: 400px;
+  font-family: sans-serif;
 `
-const OpenFontPalette = styled(OpenBgPalette)``
 export default Modal

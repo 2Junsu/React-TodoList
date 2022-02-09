@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Tag, Button, Header } from '../elements'
-import { Modal } from '../components'
+import { TagModal } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -9,9 +9,14 @@ import { addTodo, changeModal, clearTags } from '../redux/reducer/todo'
 import { useNavigate } from 'react-router-dom'
 
 const AddTodo = () => {
+  useEffect(() => {
+    window.onbeforeunload = function () {
+      return 's'
+    }
+  }, [])
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const modalOpen = useSelector((state) => state.reducer.modalOpen)
+  const modalOpen = useSelector((state) => state.reducer.modalOpen.tag)
   const tags = useSelector((state) => state.reducer.tags)
 
   const [date, setDate] = useState(new Date())
@@ -19,9 +24,10 @@ const AddTodo = () => {
     title: '',
     content: '',
     tags: [],
-    deadline: new Date(),
+    deadline: new Date().toLocaleDateString(),
     date: new Date().toLocaleString(),
     isCompleted: false,
+    completedTime: '',
     id: new Date().getTime(),
   })
 
@@ -40,7 +46,7 @@ const AddTodo = () => {
   }
 
   const onSubmit = () => {
-    //리덕스에 할 일 추가
+    //유효성 검증 후 리덕스에 할 일 추가
     if (form.title === '' || form.content === '')
       alert('입력되지 않은 정보가 있습니다.')
     else {
@@ -53,7 +59,7 @@ const AddTodo = () => {
 
   const openModal = () => {
     //modal창 open
-    dispatch(changeModal(true))
+    dispatch(changeModal({ state: true, type: 'tag' }))
   }
 
   useEffect(() => {
@@ -95,7 +101,7 @@ const AddTodo = () => {
         <Tags>
           {tags.map((data, idx) => (
             <Tag
-              id={idx}
+              id={data.id}
               name={data.name}
               bgColor={data.bgColor}
               fontColor={data.fontColor}
@@ -104,7 +110,7 @@ const AddTodo = () => {
           ))}
         </Tags>
       </TagContainer>
-      <Modal open={modalOpen} />
+      <TagModal open={modalOpen} />
       <DateContainer>
         <Deadline>마감 목표일</Deadline>
         <DatePicker selected={date} onSelect={handleDate} />

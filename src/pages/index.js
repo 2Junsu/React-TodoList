@@ -1,4 +1,5 @@
 import Main from './Main'
 import Detail from './Detail'
 import AddTodo from './AddTodo'
-export { Main, Detail, AddTodo }
+import EditTodo from './EditTodo'
+export { Main, Detail, AddTodo, EditTodo }

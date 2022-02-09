@@ -1,27 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Header, Tag } from '../elements'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Detail = () => {
-  const [isCompleted, setIsCompleted] = useState(false)
   const id = useParams().id
   const data = useSelector((state) => state.reducer.todoList[id])
-  console.log(data)
+  const isCompleted = data.isCompleted
+  const completedTime = data.completedTime
 
   return (
     <Wrap>
       <Header />
       <Container>
-        <Deadline>마감 목표일 : {data.deadline.slice(0, -11)}</Deadline>
+        <Deadline>마감 목표일 : {data.deadline}</Deadline>
         <Title>{data.title}</Title>
         <DateContainer>
           <Date>생성일 : {data.date}</Date>
           <EditDate>수정일 : 2022년 02월 07일</EditDate>
           <CompleteDate>
             {isCompleted
-              ? `완료일 : 2022년 02월 07일`
+              ? `완료일 : ${completedTime}`
               : '아직 완료하지 않은 일입니다.'}
           </CompleteDate>
         </DateContainer>
@@ -93,6 +93,6 @@ const TagContainer = styled.div`
 const Tags = styled.div`
   margin-top: 10px;
   display: flex;
-  flex-wrap: wrap;
+  overflow-x: auto;
 `
 export default Detail

@@ -11,8 +11,9 @@ const todoReducer = createSlice({
       JSON.parse(localStorage.getItem('completedList')) === null
         ? []
         : JSON.parse(localStorage.getItem('completedList')),
-    modalOpen: false,
+    modalOpen: { tag: false, title: false, content: false },
     tags: [],
+    allTags: [],
   },
   reducers: {
     addTodo: (state, action) => {
@@ -47,6 +48,23 @@ const todoReducer = createSlice({
         todoList: list,
       }
     },
+    editTodo: (state, action) => {
+      const list = action.payload
+      console.log(list)
+      state.todoList.forEach((data) => {
+        if (data.id === action.payload.id) {
+          data.title = list.title
+          data.content = list.content
+          data.deadline = list.deadline
+          data.date = list.date
+          data.isCompleted = list.isCompleted
+          data.id = list.id
+          data.tags = list.tags
+        }
+      })
+      console.log(state.todoList)
+      localStorage.setItem('todoList', JSON.stringify(state.todoList))
+    },
     filterOnlyCompleted: (state, action) => {
       //완료된 할 일만 필터링
       const list = state.todoList.filter((data, idx) => data.isCompleted)
@@ -59,8 +77,10 @@ const todoReducer = createSlice({
     changeCheck: (state, action) => {
       //완료했는지 여부 체크
       state.todoList.forEach((data, idx) => {
-        if (data.id === action.payload.id)
+        if (data.id === action.payload.id) {
           data.isCompleted = action.payload.isTrue
+          data.completedTime = action.payload.completedTime
+        }
       })
 
       //완료된 할 일 리스트에도 적용
@@ -74,7 +94,11 @@ const todoReducer = createSlice({
     },
     changeModal: (state, action) => {
       //모달창 open 여부 관리
-      state.modalOpen = action.payload
+      const type = action.payload.type
+      //state.modalOpen = action.payload.state
+      let data = { ...state.modalOpen, [type]: action.payload.state }
+      console.log(data)
+      return { ...state, modalOpen: data }
     },
     addTag: (state, action) => {
       //태그 추가
@@ -98,6 +122,7 @@ export const {
   addTodo,
   deleteTodo,
   deleteCompletedTodo,
+  editTodo,
   filterOnlyCompleted,
   changeCheck,
   changeModal,

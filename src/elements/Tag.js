@@ -19,6 +19,8 @@ const Tag = (props) => {
 }
 
 const Container = styled.div`
+  width: 80px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,12 +29,20 @@ const Container = styled.div`
   color: ${(props) => props.fontColor};
   padding: 8px 16px;
   border-radius: 8px;
+  white-space: nowrap;
   &:hover {
     cursor: pointer;
   }
 `
-const Name = styled.div``
+const Name = styled.div`
+  width: 100%;
+  //display: flex;
+  overflow-x: auto;
+`
 const Date = styled.div`
-  margin-top: 10px;
+  width: 100%;
+  //display: flex;
+  overflow-x: scroll;
+  margin-top: 5px;
 `
 export default Tag
