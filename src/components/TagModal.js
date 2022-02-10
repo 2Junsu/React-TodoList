@@ -16,7 +16,7 @@ const TagModal = (props) => {
   const [tagName, setTagName] = useState('')
   const [bgColor, setBgColor] = useState('white')
   const [fontColor, setFontColor] = useState('black')
-  const [date, setDate] = useState(new Date().toLocaleDateString())
+  const date = new Date().toLocaleDateString()
 
   const [bgPaletteClicked, setBgPaletteClicked] = useState(false)
   const [fontPaletteClicked, setFontPaletteClicked] = useState(false)

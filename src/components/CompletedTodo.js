@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteTodo } from '../redux/reducer/todo'
-import $ from 'jquery'
 import { Tag } from '../elements'
 
 const CompletedTodo = (props) => {
