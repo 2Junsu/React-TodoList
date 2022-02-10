@@ -1,16 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Todo, CompletedTodo } from '../components'
 import { Header, Button } from '../elements'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteCompletedTodo, filterOnlyCompleted } from '../redux/reducer/todo'
+import $ from 'jquery'
 
-const Main = () => {
+const Main = (props) => {
+  const type = props.type
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const todoList = useSelector((state) => state.reducer.todoList)
+  const [showTodoList, setShowTodoList] = useState(todoList) //필터링에 따라 화면에 보여질 실제 투두리스트
   const completedList = useSelector((state) => state.reducer.completedList)
+  const allTags = useSelector((state) => state.reducer.allTags)
+  const allTagsName = allTags.map((data) => data.name) //전체 태그의 이름만을 저장할 배열
+  const set = new Set(allTagsName) //태그명 중복을 없애기 위해 배열을 set 객체로 변환
+  const filterTags = [...set].sort() //set 객체를 다시 배열로 변환
 
   const [isAll, setIsAll] = useState(true)
   const [isCompleted, setIsCompleted] = useState(false)
@@ -46,9 +53,69 @@ const Main = () => {
         window.location.reload()
       }
   }
+
+  const onOptionSelected = (e) => {
+    //필터값이 설정되었을 때 실행되는 함수
+    let list = [...showTodoList]
+    const filterType = e.target.value
+
+    switch (filterType) {
+      case 'lateCreate':
+        $('#tagFilter').hide()
+        list = list.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+        setShowTodoList(list)
+        break
+      case 'recentCreate':
+        $('#tagFilter').hide()
+        list = list.sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+        setShowTodoList(list)
+        break
+      case 'lateDeadline':
+        $('#tagFilter').hide()
+        list = list.sort(
+          (a, b) => Date.parse(b.deadline) - Date.parse(a.deadline),
+        )
+        setShowTodoList(list)
+        break
+      case 'recentDeadline':
+        $('#tagFilter').hide()
+        list = list.sort(
+          (a, b) => Date.parse(a.deadline) - Date.parse(b.deadline),
+        )
+        setShowTodoList(list)
+        break
+      case 'tag':
+        setShowTodoList(todoList)
+        $('#tagFilter').show()
+        break
+      default:
+        break
+    }
+  }
+
+  const onTagSelected = (e) => {
+    //선택된 태그가 포함된 할 일만 필터링
+    let list = []
+    const tagName = e.target.value
+    todoList.forEach((data) => {
+      data.tags.forEach((e) => {
+        if (e.name === tagName) {
+          list.push(data)
+          return
+        }
+      })
+    })
+
+    setShowTodoList(list)
+  }
+
+  useEffect(() => {
+    $('#tagFilter').hide()
+  }, [])
+
   return (
     <Container>
-      <Header />
+      <Header type={type} />
       <Buttons>
         <FilterBtn onClick={seeAll}>전체 할 일 보기</FilterBtn>
         <FilterBtn onClick={onlyCompleted}>완료한 일만 보기</FilterBtn>
@@ -56,6 +123,28 @@ const Main = () => {
       </Buttons>
       <ListView>
         <ListHeader>
+          <TagFilter
+            id="tagFilter"
+            onChange={onTagSelected}
+            defaultValue="default"
+          >
+            <option value="default" disabled>
+              태그를 선택하세요.
+            </option>
+            {filterTags &&
+              filterTags.map((data, idx) => (
+                <option key={idx} value={data}>
+                  {data}
+                </option>
+              ))}
+          </TagFilter>
+          <Filter onChange={onOptionSelected} defaultValue="lateCreate">
+            <option value="lateCreate">오래된 생성순</option>
+            <option value="recentCreate">최근 생성순</option>
+            <option value="lateDeadline">마감일 느린 순</option>
+            <option value="recentDeadline">마감일 빠른 순</option>
+            <option value="tag">태그 별</option>
+          </Filter>
           <Text>해야할 일</Text>
           <Write src={require('../assets/images/add.png')} onClick={onClick} />
         </ListHeader>
@@ -74,8 +163,8 @@ const Main = () => {
             </div>
           ) : (
             isAll &&
-            todoList &&
-            todoList.map((data, idx) => (
+            showTodoList &&
+            showTodoList.map((data, idx) => (
               <Todo
                 id={data.id}
                 idx={idx}
@@ -145,6 +234,17 @@ const ListContent = styled.div`
   border-radius: 8px;
   overflow: auto;
   padding: 30px;
+`
+const Filter = styled.select`
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 2px solid skyblue;
+  position: absolute;
+  left: 0px;
+`
+const TagFilter = styled(Filter)`
+  top: -60px;
 `
 const Write = styled.img`
   width: 30px;

@@ -24,6 +24,7 @@ const Todo = (props) => {
     //마감 목표일이 3일 이내면 빨간색으로 표시
     let time = deadlineMilli - nowMilli
     if (time <= 259200000) setIsSoon(true)
+    else setIsSoon(false)
   }
 
   setInterval(untilDeadline, 1000)
@@ -50,7 +51,9 @@ const Todo = (props) => {
         changeCheck({
           id,
           isTrue: true,
-          completedTime: new Date().toLocaleString(),
+          completedTime: new Date().toLocaleString('en', {
+            timeZone: 'Asia/Seoul',
+          }),
         }),
       )
     else dispatch(changeCheck({ id, isTrue: false, completedTime: '' }))
@@ -75,7 +78,9 @@ const Todo = (props) => {
             <TitleContainer onClick={onClick}>
               <Title>{data.title}</Title>
             </TitleContainer>
-            <Deadline>{data.deadline}</Deadline>
+            <Deadline>
+              {data.deadline.slice(0, -12).replaceAll('/', '.')}
+            </Deadline>
           </TitleDeadline>
         </Left>
         <Buttons>

@@ -8,7 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { addTodo, changeModal, clearTags } from '../redux/reducer/todo'
 import { useNavigate } from 'react-router-dom'
 
-const AddTodo = () => {
+const AddTodo = (props) => {
+  const type = props.type
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const modalOpen = useSelector((state) => state.reducer.modalOpen.tag)
@@ -19,8 +20,8 @@ const AddTodo = () => {
     title: '',
     content: '',
     tags: [],
-    deadline: new Date().toLocaleDateString(),
-    date: new Date().toLocaleString(),
+    deadline: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
+    date: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
     isCompleted: false,
     completedTime: '',
     id: new Date().getTime(),
@@ -70,17 +71,18 @@ const AddTodo = () => {
     //마감 목표일이 변경될 때마다 리덕스에 들어갈 deadline 변경
     const changed = {
       ...form,
-      deadline: date.toLocaleDateString(), //리덕스는 직렬화가 가능한 값을 권장하므로 객체->문자열로 변환
+      deadline: date.toLocaleString('en', { timeZone: 'Asia/Seoul' }), //리덕스는 직렬화가 가능한 값을 권장하므로 객체->문자열로 변환
     }
     setForm(changed)
   }, [date])
 
+  //뒤로가기 감지
   window.onpopstate = (e) => {
     if (
       window.confirm('입력 중인 내용이 삭제되고, 메인 페이지로 이동합니다.')
     ) {
       navigate('/')
-    } else return
+    }
   }
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const AddTodo = () => {
 
   return (
     <Container>
-      <Header />
+      <Header type={type} />
       <TitleInput
         name="title"
         type="text"

@@ -6,10 +6,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/add" element={<AddTodo />} />
-        <Route path="/edit/:id" element={<EditTodo />} />
+        <Route path="/" element={<Main type="main" />} />
+        <Route path="/detail/:id" element={<Detail type="detail" />} />
+        <Route path="/add" element={<AddTodo type="add" />} />
+        <Route path="/edit/:id" element={<EditTodo type="edit" />} />
       </Routes>
     </BrowserRouter>
   )

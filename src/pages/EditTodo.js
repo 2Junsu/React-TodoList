@@ -9,7 +9,8 @@ import $ from 'jquery'
 import { addTag, changeModal, editTodo } from '../redux/reducer/todo'
 import { useNavigate } from 'react-router-dom'
 
-const EditTodo = () => {
+const EditTodo = (props) => {
+  const type = props.type
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -50,7 +51,7 @@ const EditTodo = () => {
       title,
       content,
       tags,
-      deadline: date.toLocaleDateString(),
+      deadline: date.toLocaleString('en', { timeZone: 'Asia/Seoul' }),
     }
     dispatch(editTodo(submitData))
     alert('수정이 완료되었습니다.')
@@ -97,7 +98,7 @@ const EditTodo = () => {
 
   return (
     <Wrap>
-      <Header />
+      <Header type={type} />
       <Container>
         <ChangeView>
           <Deadline>마감 목표일 : {data.deadline}</Deadline>

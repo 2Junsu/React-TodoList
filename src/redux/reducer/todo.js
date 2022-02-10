@@ -29,21 +29,6 @@ const todoReducer = createSlice({
         state.allTags.push(data)
       })
 
-      //   let list = action.payload.tags
-      //   console.log(list)
-      //   //allTags에 이미 존재하는 태그명은 제외하고 나머지 태그들을 allTags에 등록
-      //   state.allTags.forEach((allData) => {
-      //     action.payload.tags.forEach((data, idx) => {
-      //       if (data.name === allData.name) {
-      //         list = list.filter((listData) => listData.name !== data.name)
-      //       }
-      //     })
-      //   })
-
-      //   console.log(list)
-      //   list.forEach((data) => {
-      //     state.allTags.push(data)
-      //   })
       localStorage.setItem('allTags', JSON.stringify(state.allTags))
     },
     deleteTodo: (state, action) => {
@@ -88,6 +73,30 @@ const todoReducer = createSlice({
       //완료된 할 일 일괄 삭제
       const list = state.todoList.filter((data, idx) => !data.isCompleted)
       localStorage.setItem('todoList', JSON.stringify(list))
+
+      //해당 할 일에 등록된 태그를 allTags에서도 삭제
+      const deleteList = state.todoList.filter((data) => data.isCompleted)
+
+      //삭제할 태그들
+      let deleteTags = []
+      deleteList.forEach((data) => {
+        data.tags.forEach((e) => {
+          deleteTags.push(e)
+        })
+      })
+
+      let allTags = state.allTags
+
+      //삭제할 태그들을 allTags에서 제외함
+      deleteTags.forEach((data) => {
+        state.allTags.forEach((allData) => {
+          if (data.id === allData.id)
+            allTags = allTags.filter((e) => e.id !== data.id)
+        })
+      })
+
+      localStorage.setItem('allTags', JSON.stringify(allTags))
+
       return {
         ...state,
         todoList: list,
@@ -95,7 +104,6 @@ const todoReducer = createSlice({
     },
     editTodo: (state, action) => {
       const list = action.payload
-      console.log(list)
       state.todoList.forEach((data) => {
         if (data.id === action.payload.id) {
           data.title = list.title
@@ -107,7 +115,6 @@ const todoReducer = createSlice({
           data.tags = list.tags
         }
       })
-      console.log(state.todoList)
       localStorage.setItem('todoList', JSON.stringify(state.todoList))
     },
     filterOnlyCompleted: (state, action) => {
@@ -142,7 +149,6 @@ const todoReducer = createSlice({
       const type = action.payload.type
       //state.modalOpen = action.payload.state
       let data = { ...state.modalOpen, [type]: action.payload.state }
-      console.log(data)
       return { ...state, modalOpen: data }
     },
     addTag: (state, action) => {

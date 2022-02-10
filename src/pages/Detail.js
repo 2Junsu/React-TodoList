@@ -4,7 +4,8 @@ import { Header, Tag } from '../elements'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const Detail = () => {
+const Detail = (props) => {
+  const type = props.type
   const id = useParams().id
   const data = useSelector((state) => state.reducer.todoList[id])
   const isCompleted = data.isCompleted
@@ -12,16 +13,18 @@ const Detail = () => {
 
   return (
     <Wrap>
-      <Header />
+      <Header type={type} />
       <Container>
-        <Deadline>마감 목표일 : {data.deadline}</Deadline>
+        <Deadline>
+          마감 목표일 : {data.deadline.slice(0, -12).replaceAll('/', '.')}
+        </Deadline>
         <Title>{data.title}</Title>
         <DateContainer>
-          <Date>생성일 : {data.date}</Date>
+          <Date>생성일 : {data.date.replaceAll('/', '.')}</Date>
           <EditDate>수정일 : 2022년 02월 07일</EditDate>
           <CompleteDate>
             {isCompleted
-              ? `완료일 : ${completedTime}`
+              ? `완료일 : ${completedTime.replaceAll('/', '.')}`
               : '아직 완료하지 않은 일입니다.'}
           </CompleteDate>
         </DateContainer>

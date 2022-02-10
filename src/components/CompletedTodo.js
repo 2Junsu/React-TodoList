@@ -55,7 +55,9 @@ const CompletedTodo = (props) => {
             <TitleContainer onClick={onClick}>
               <Title>{data.title}</Title>
             </TitleContainer>
-            <Deadline>{data.deadline}</Deadline>
+            <Deadline>
+              {data.deadline.slice(0, -12).replaceAll('/', '.')}
+            </Deadline>
           </TitleDeadline>
         </Left>
         <Buttons>
