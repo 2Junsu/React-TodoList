@@ -56,8 +56,8 @@ const Main = (props) => {
 
   const onOptionSelected = (e) => {
     //필터값이 설정되었을 때 실행되는 함수
-    let list = [...showTodoList]
     const filterType = e.target.value
+    let list = [...todoList]
 
     switch (filterType) {
       case 'lateCreate':
@@ -87,6 +87,7 @@ const Main = (props) => {
       case 'tag':
         setShowTodoList(todoList)
         $('#tagFilter').show()
+        $('#tagFilter').val('default').prop('selected', true)
         break
       default:
         break
@@ -97,16 +98,19 @@ const Main = (props) => {
     //선택된 태그가 포함된 할 일만 필터링
     let list = []
     const tagName = e.target.value
-    todoList.forEach((data) => {
-      data.tags.forEach((e) => {
-        if (e.name === tagName) {
-          list.push(data)
-          return
-        }
+    if (tagName === 'default') setShowTodoList(todoList)
+    else {
+      todoList.forEach((data) => {
+        data.tags.forEach((e) => {
+          if (e.name === tagName) {
+            list.push(data)
+            return
+          }
+        })
       })
-    })
 
-    setShowTodoList(list)
+      setShowTodoList(list)
+    }
   }
 
   useEffect(() => {
@@ -128,9 +132,7 @@ const Main = (props) => {
             onChange={onTagSelected}
             defaultValue="default"
           >
-            <option value="default" disabled>
-              태그를 선택하세요.
-            </option>
+            <option value="default">전체</option>
             {filterTags &&
               filterTags.map((data, idx) => (
                 <option key={idx} value={data}>
