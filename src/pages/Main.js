@@ -59,26 +59,56 @@ const Main = () => {
           <Text>해야할 일</Text>
           <Write src={require('../assets/images/add.png')} onClick={onClick} />
         </ListHeader>
-        {isAll &&
-          todoList &&
-          todoList.map((data, idx) => (
-            <Todo
-              id={data.id}
-              idx={idx}
-              checkId={'check' + data.id}
-              completeColor="#dddddd"
-            />
-          ))}
-        {isCompleted &&
-          completedList &&
-          completedList.map((data, idx) => (
-            <CompletedTodo
-              id={data.id}
-              idx={idx}
-              checkId={'completedCheck' + data.id}
-              completeColor="#dddddd"
-            />
-          ))}
+        <ListContent>
+          {todoList.length === 0 && isAll ? (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: 32, color: 'gray' }}>
+                할 일을 등록해보세요.
+              </span>
+            </div>
+          ) : (
+            isAll &&
+            todoList &&
+            todoList.map((data, idx) => (
+              <Todo
+                id={data.id}
+                idx={idx}
+                checkId={'check' + data.id}
+                completeColor="#dddddd"
+              />
+            ))
+          )}
+          {completedList.length === 0 && isCompleted ? (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: 32, color: 'gray' }}>
+                아직 완료한 일이 없습니다.
+              </span>
+            </div>
+          ) : (
+            isCompleted &&
+            completedList &&
+            completedList.map((data, idx) => (
+              <CompletedTodo
+                id={data.id}
+                idx={idx}
+                checkId={'completedCheck' + data.id}
+                completeColor="#dddddd"
+              />
+            ))
+          )}
+        </ListContent>
       </ListView>
     </Container>
   )
@@ -104,6 +134,17 @@ const ListHeader = styled.div`
   align-items: center;
   position: relative;
   margin: 30px 0px;
+`
+const ListContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 700px;
+  border: 4px solid skyblue;
+  border-radius: 8px;
+  overflow: auto;
+  padding: 30px;
 `
 const Write = styled.img`
   width: 30px;
