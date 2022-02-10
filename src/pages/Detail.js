@@ -21,7 +21,7 @@ const Detail = (props) => {
         <Title>{data.title}</Title>
         <DateContainer>
           <Date>생성일 : {data.date.replaceAll('/', '.')}</Date>
-          <EditDate>수정일 : 2022년 02월 07일</EditDate>
+          <EditDate>수정일 : {data.editDate.replaceAll('/', '.')}</EditDate>
           <CompleteDate>
             {isCompleted
               ? `완료일 : ${completedTime.replaceAll('/', '.')}`

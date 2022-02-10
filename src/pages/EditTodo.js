@@ -52,6 +52,7 @@ const EditTodo = (props) => {
       content,
       tags,
       deadline: date.toLocaleString('en', { timeZone: 'Asia/Seoul' }),
+      editDate: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
     }
     dispatch(editTodo(submitData))
     alert('수정이 완료되었습니다.')

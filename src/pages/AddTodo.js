@@ -22,6 +22,7 @@ const AddTodo = (props) => {
     tags: [],
     deadline: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
     date: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
+    editDate: '',
     isCompleted: false,
     completedTime: '',
     id: new Date().getTime(),

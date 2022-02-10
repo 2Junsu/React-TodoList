@@ -110,6 +110,7 @@ const todoReducer = createSlice({
           data.content = list.content
           data.deadline = list.deadline
           data.date = list.date
+          data.editDate = list.editDate
           data.isCompleted = list.isCompleted
           data.id = list.id
           data.tags = list.tags
