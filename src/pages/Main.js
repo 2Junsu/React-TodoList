@@ -30,6 +30,7 @@ const Main = (props) => {
     //전체 할 일 보기
     setIsAll(true)
     if (isCompleted) setIsCompleted(false)
+    $('#filter').show()
   }
 
   const onlyCompleted = () => {
@@ -37,6 +38,7 @@ const Main = (props) => {
     setIsCompleted(true)
     if (isAll) setIsAll(false)
     dispatch(filterOnlyCompleted())
+    $('#filter').hide()
   }
 
   const deleteCompleted = () => {
@@ -114,6 +116,7 @@ const Main = (props) => {
   }
 
   useEffect(() => {
+    $('#filter').show()
     $('#tagFilter').hide()
   }, [])
 
@@ -140,7 +143,11 @@ const Main = (props) => {
                 </option>
               ))}
           </TagFilter>
-          <Filter onChange={onOptionSelected} defaultValue="lateCreate">
+          <Filter
+            id="filter"
+            onChange={onOptionSelected}
+            defaultValue="lateCreate"
+          >
             <option value="lateCreate">오래된 생성순</option>
             <option value="recentCreate">최근 생성순</option>
             <option value="lateDeadline">마감일 느린 순</option>
