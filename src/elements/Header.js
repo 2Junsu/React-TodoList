@@ -11,8 +11,12 @@ const Header = () => {
   return (
     <Text
       onClick={() => {
-        navigate('/')
-        dispatch(clearTags())
+        if (
+          window.confirm('입력 중인 내용이 삭제되고, 메인 페이지로 이동합니다.')
+        ) {
+          navigate('/')
+          dispatch(clearTags())
+        }
       }}
     >
       My TodoList

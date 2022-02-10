@@ -11,10 +11,12 @@ const TagModal = (props) => {
   const dispatch = useDispatch()
   const modalOpen = props.open
   const tags = useSelector((state) => state.reducer.tags)
+  const allTags = useSelector((state) => state.reducer.allTags)
 
   const [tagName, setTagName] = useState('')
   const [bgColor, setBgColor] = useState('white')
   const [fontColor, setFontColor] = useState('black')
+  const [date, setDate] = useState(new Date().toLocaleDateString())
 
   const [bgPaletteClicked, setBgPaletteClicked] = useState(false)
   const [fontPaletteClicked, setFontPaletteClicked] = useState(false)
@@ -57,24 +59,72 @@ const TagModal = (props) => {
       //태그를 꼭 입력하도록 유효성 검증
       alert('태그를 입력하세요.')
     } else {
-      //중복된 태그가 존재하는지 확인 후에 태그 등록
+      //현재 등록창 내에 중복된 태그가 존재하는지 확인 후에 태그 등록
       let duplicate = false
+
+      //현재 등록창 내에 중복된 태그색이 존재하는지 확인 후에 태그 등록
+      let colorDuplicate = false
+
+      //전체 등록된 태그들 중에 중복된 태그가 존재하는지 확인 후에 태그 등록
+      let allTagDuplicate = false
+
       tags.forEach((data) => {
         if (data.name === tagName) duplicate = true
       })
+
+      tags.forEach((data) => {
+        if (data.bgColor === bgColor) colorDuplicate = true
+      })
+
       if (duplicate) alert('같은 이름의 태그가 이미 존재합니다.')
+      else if (colorDuplicate) alert('같은 색의 태그가 이미 존재합니다.')
       else {
-        dispatch(
-          addTag({
-            name: tagName,
-            fontColor,
-            bgColor,
-            date: new Date().toLocaleString(),
-            id: new Date().getTime(),
-          }),
-        )
-        closeModal()
-        setTagName('')
+        //전체 할 일들에 등록된 태그 중에 겹치는 태그가 있으면 현재 태그를 기존 태그의 색 및 생성일로 변경
+        allTags.forEach((data) => {
+          if (data.name === tagName) {
+            dispatch(
+              addTag({
+                name: tagName,
+                fontColor: data.fontColor,
+                bgColor: data.bgColor,
+                date: data.date,
+                id: new Date().getTime(),
+              }),
+            )
+            alert(
+              '기존의 태그가 존재하므로 색상과 생성일이 자동으로 변경됩니다.',
+            )
+            allTagDuplicate = true
+            closeModal()
+            setTagName('')
+            return
+          }
+        })
+
+        //태그를 색으로 구분하기 위해 기존의 태그와 색이 같으면 다시 고름
+        let allColorDuplicate = false
+        if (!allTagDuplicate) {
+          allTags.forEach((data) => {
+            if (data.bgColor === bgColor) {
+              alert('해당 배경색을 가진 태그가 이미 존재합니다.')
+              allColorDuplicate = true
+              return
+            }
+          })
+          if (!allColorDuplicate) {
+            dispatch(
+              addTag({
+                name: tagName,
+                fontColor,
+                bgColor,
+                date,
+                id: new Date().getTime(),
+              }),
+            )
+            closeModal()
+            setTagName('')
+          }
+        }
       }
     }
   }

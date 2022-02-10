@@ -13,13 +13,35 @@ const todoReducer = createSlice({
         : JSON.parse(localStorage.getItem('completedList')),
     modalOpen: { tag: false, title: false, content: false },
     tags: [],
-    allTags: [],
+    allTags:
+      JSON.parse(localStorage.getItem('allTags')) === null
+        ? []
+        : JSON.parse(localStorage.getItem('allTags')),
   },
   reducers: {
     addTodo: (state, action) => {
       //할 일 추가
       state.todoList.push(action.payload)
       localStorage.setItem('todoList', JSON.stringify(state.todoList))
+
+      //태그 정보 저장을 위해 allTags에 태그 추가
+      let list = action.payload.tags
+      console.log(list)
+
+      //allTags에 이미 존재하는 태그명은 제외하고 나머지 태그들을 allTags에 등록
+      state.allTags.forEach((allData) => {
+        action.payload.tags.forEach((data, idx) => {
+          if (data.name === allData.name) {
+            list = list.filter((listData) => listData.name !== data.name)
+          }
+        })
+      })
+
+      console.log(list)
+      list.forEach((data) => {
+        state.allTags.push(data)
+      })
+      localStorage.setItem('allTags', JSON.stringify(state.allTags))
     },
     deleteTodo: (state, action) => {
       //할 일 삭제

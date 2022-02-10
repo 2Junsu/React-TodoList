@@ -9,11 +9,6 @@ import { addTodo, changeModal, clearTags } from '../redux/reducer/todo'
 import { useNavigate } from 'react-router-dom'
 
 const AddTodo = () => {
-  useEffect(() => {
-    window.onbeforeunload = function () {
-      return 's'
-    }
-  }, [])
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const modalOpen = useSelector((state) => state.reducer.modalOpen.tag)
@@ -79,6 +74,22 @@ const AddTodo = () => {
     }
     setForm(changed)
   }, [date])
+
+  window.onpopstate = (e) => {
+    if (
+      window.confirm('입력 중인 내용이 삭제되고, 메인 페이지로 이동합니다.')
+    ) {
+      navigate('/')
+    } else return
+  }
+
+  useEffect(() => {
+    //브라우저 닫으려고 할 때 알림
+    window.addEventListener('beforeunload', (e) => {
+      e.preventDefault()
+      e.returnValue = ''
+    })
+  }, [])
 
   return (
     <Container>
