@@ -25,22 +25,25 @@ const todoReducer = createSlice({
       localStorage.setItem('todoList', JSON.stringify(state.todoList))
 
       //태그 정보 저장을 위해 allTags에 태그 추가
-      let list = action.payload.tags
-      console.log(list)
-
-      //allTags에 이미 존재하는 태그명은 제외하고 나머지 태그들을 allTags에 등록
-      state.allTags.forEach((allData) => {
-        action.payload.tags.forEach((data, idx) => {
-          if (data.name === allData.name) {
-            list = list.filter((listData) => listData.name !== data.name)
-          }
-        })
-      })
-
-      console.log(list)
-      list.forEach((data) => {
+      action.payload.tags.forEach((data) => {
         state.allTags.push(data)
       })
+
+      //   let list = action.payload.tags
+      //   console.log(list)
+      //   //allTags에 이미 존재하는 태그명은 제외하고 나머지 태그들을 allTags에 등록
+      //   state.allTags.forEach((allData) => {
+      //     action.payload.tags.forEach((data, idx) => {
+      //       if (data.name === allData.name) {
+      //         list = list.filter((listData) => listData.name !== data.name)
+      //       }
+      //     })
+      //   })
+
+      //   console.log(list)
+      //   list.forEach((data) => {
+      //     state.allTags.push(data)
+      //   })
       localStorage.setItem('allTags', JSON.stringify(state.allTags))
     },
     deleteTodo: (state, action) => {
@@ -55,10 +58,30 @@ const todoReducer = createSlice({
       )
       localStorage.setItem('completedList', JSON.stringify(completedList))
 
+      //해당 할 일에 등록된 태그를 allTags에서도 삭제
+      const deleteList = state.todoList.filter(
+        (data) => data.id === action.payload,
+      )
+
+      //삭제할 태그들
+      let deleteTags = deleteList[0].tags
+      let allTags = state.allTags
+
+      //삭제할 태그들을 allTags에서 제외함
+      deleteTags.forEach((data) => {
+        state.allTags.forEach((allData) => {
+          if (data.id === allData.id)
+            allTags = allTags.filter((e) => e.id !== data.id)
+        })
+      })
+
+      localStorage.setItem('allTags', JSON.stringify(allTags))
+
       return {
         ...state,
         todoList: list,
         completedList,
+        allTags,
       }
     },
     deleteCompletedTodo: (state, action) => {
