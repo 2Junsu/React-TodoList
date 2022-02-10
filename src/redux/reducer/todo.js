@@ -117,6 +117,16 @@ const todoReducer = createSlice({
         }
       })
       localStorage.setItem('todoList', JSON.stringify(state.todoList))
+
+      //태그가 바뀌었으면 allTags 변경
+      let allTags = []
+      state.todoList.forEach((data) => {
+        data.tags.forEach((e) => {
+          allTags.push(e)
+        })
+      })
+      state.allTags = [...allTags]
+      localStorage.setItem('allTags', JSON.stringify(state.allTags))
     },
     filterOnlyCompleted: (state, action) => {
       //완료된 할 일만 필터링
