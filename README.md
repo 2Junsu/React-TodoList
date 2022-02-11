@@ -7,6 +7,7 @@
 
 ### 1. 메인 페이지
 <img width="250" alt="스크린샷 2022-02-11 오전 6 13 14" src="https://user-images.githubusercontent.com/77619905/153497304-d2297adc-1764-4773-b4a8-f5c6aaaa98b5.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 14 17" src="https://user-images.githubusercontent.com/77619905/153497449-fdbcd5a7-afd7-4882-bd56-9656f51dad01.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 14 55" src="https://user-images.githubusercontent.com/77619905/153497563-db97f68d-ec9f-4840-b17a-a49a3e573da3.png">
+* 메인 페이지의 각 할 일에는 제목, 마감 목표일, 태그 정보가 나타납니다.
 * 체크박스를 누르면 테두리 및 글씨 색이 회색으로 바뀌면서 완료 표시를 하며, 완료된 일만 필터링하여 볼 수도 있습니다.
 * 완료하지 않은 일 중에 마감 목표일이 3일 이내인 일은 테두리가 빨간색으로 바뀌면서 긴급하다는 것을 알립니다.
 * 완료된 일을 일괄 삭제할 수 있습니다.
