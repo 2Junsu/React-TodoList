@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { Todo, CompletedTodo } from '../components'
-import { Header, Button } from '../elements'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteCompletedTodo, filterOnlyCompleted } from '../redux/reducer/todo'
-import $ from 'jquery'
+import React, { useState, useEffect } from "react"
+import styled from "styled-components"
+import { Todo, CompletedTodo } from "../components"
+import { Header, Button } from "../elements"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { deleteCompletedTodo, filterOnlyCompleted } from "../redux/reducer/todo"
+import $ from "jquery"
 
 const Main = (props) => {
   const type = props.type
@@ -13,33 +13,35 @@ const Main = (props) => {
   const dispatch = useDispatch()
   const todoList = useSelector((state) => state.reducer.todoList)
   const [showTodoList, setShowTodoList] = useState(todoList) //필터링에 따라 화면에 보여질 실제 투두리스트
+  const [completeIsChecked, setCompleteIsChecked] = useState(false)
   const completedList = useSelector((state) => state.reducer.completedList)
   const allTags = useSelector((state) => state.reducer.allTags)
   const allTagsName = allTags.map((data) => data.name) //전체 태그의 이름만을 저장할 배열
   const set = new Set(allTagsName) //태그명 중복을 없애기 위해 배열을 set 객체로 변환
   const filterTags = [...set].sort() //set 객체를 다시 배열로 변환
 
-  const [isAll, setIsAll] = useState(true)
-  const [isCompleted, setIsCompleted] = useState(false)
+  // const [isAll, setIsAll] = useState(true)
+  // const [isCompleted, setIsCompleted] = useState(false)
 
+  console.log(showTodoList)
   const onClick = () => {
-    navigate('/add')
+    navigate("/add")
   }
 
-  const seeAll = () => {
-    //전체 할 일 보기
-    setIsAll(true)
-    if (isCompleted) setIsCompleted(false)
-    $('#filter').show()
-  }
+  // const seeAll = () => {
+  //   //전체 할 일 보기
+  //   setIsAll(true)
+  //   if (isCompleted) setIsCompleted(false)
+  //   $("#filter").show()
+  // }
 
-  const onlyCompleted = () => {
-    //완료한 일만 보기
-    setIsCompleted(true)
-    if (isAll) setIsAll(false)
-    dispatch(filterOnlyCompleted())
-    $('#filter').hide()
-  }
+  // const onlyCompleted = () => {
+  //   //완료한 일만 보기
+  //   setIsCompleted(true)
+  //   if (isAll) setIsAll(false)
+  //   dispatch(filterOnlyCompleted())
+  //   $("#filter").hide()
+  // }
 
   const deleteCompleted = () => {
     //완료한 일이 존재하면 일괄 삭제
@@ -49,9 +51,9 @@ const Main = (props) => {
     })
 
     if (cnt !== 0)
-      if (window.confirm('정말 삭제하시겠습니까?')) {
+      if (window.confirm("정말 삭제하시겠습니까?")) {
         dispatch(deleteCompletedTodo())
-        alert('삭제되었습니다.')
+        alert("삭제되었습니다.")
         window.location.reload()
       }
   }
@@ -62,34 +64,34 @@ const Main = (props) => {
     let list = [...todoList]
 
     switch (filterType) {
-      case 'lateCreate':
-        $('#tagFilter').hide()
+      case "lateCreate":
+        $("#tagFilter").hide()
         list = list.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
         setShowTodoList(list)
         break
-      case 'recentCreate':
-        $('#tagFilter').hide()
+      case "recentCreate":
+        $("#tagFilter").hide()
         list = list.sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
         setShowTodoList(list)
         break
-      case 'lateDeadline':
-        $('#tagFilter').hide()
+      case "lateDeadline":
+        $("#tagFilter").hide()
         list = list.sort(
-          (a, b) => Date.parse(b.deadline) - Date.parse(a.deadline),
+          (a, b) => Date.parse(b.deadline) - Date.parse(a.deadline)
         )
         setShowTodoList(list)
         break
-      case 'recentDeadline':
-        $('#tagFilter').hide()
+      case "recentDeadline":
+        $("#tagFilter").hide()
         list = list.sort(
-          (a, b) => Date.parse(a.deadline) - Date.parse(b.deadline),
+          (a, b) => Date.parse(a.deadline) - Date.parse(b.deadline)
         )
         setShowTodoList(list)
         break
-      case 'tag':
+      case "tag":
         setShowTodoList(todoList)
-        $('#tagFilter').show()
-        $('#tagFilter').val('default').prop('selected', true)
+        $("#tagFilter").show()
+        $("#tagFilter").val("default").prop("selected", true)
         break
       default:
         break
@@ -100,7 +102,7 @@ const Main = (props) => {
     //선택된 태그가 포함된 할 일만 필터링
     let list = []
     const tagName = e.target.value
-    if (tagName === 'default') setShowTodoList(todoList)
+    if (tagName === "default") setShowTodoList(todoList)
     else {
       todoList.forEach((data) => {
         data.tags.forEach((e) => {
@@ -116,16 +118,28 @@ const Main = (props) => {
   }
 
   useEffect(() => {
-    $('#filter').show()
-    $('#tagFilter').hide()
+    $("#filter").show()
+    $("#tagFilter").hide()
   }, [])
+
+  useEffect(() => {
+    setShowTodoList(todoList)
+  }, [todoList])
 
   return (
     <Container>
       <Header type={type} />
       <Buttons>
-        <FilterBtn onClick={seeAll}>전체 할 일 보기</FilterBtn>
-        <FilterBtn onClick={onlyCompleted}>완료한 일만 보기</FilterBtn>
+        {/* <FilterBtn onClick={seeAll}>전체 할 일 보기</FilterBtn>
+        <FilterBtn onClick={onlyCompleted}>완료한 일만 보기</FilterBtn> */}
+        <span>완료한 일만 보기</span>
+        <input
+          type="checkbox"
+          checked={completeIsChecked}
+          onChange={() => {
+            setCompleteIsChecked(!completeIsChecked)
+          }}
+        />
         <DeleteBtn onClick={deleteCompleted}>완료한 일 삭제</DeleteBtn>
       </Buttons>
       <ListView>
@@ -155,42 +169,55 @@ const Main = (props) => {
             <option value="tag">태그 별</option>
           </Filter>
           <Text>해야할 일</Text>
-          <Write src={require('../assets/images/add.png')} onClick={onClick} />
+          <Write src={require("../assets/images/add.png")} onClick={onClick} />
         </ListHeader>
         <ListContent>
-          {todoList.length === 0 && isAll ? (
+          {todoList.length === 0 ? (
             <div
               style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
               }}
             >
-              <span style={{ fontSize: 32, color: 'gray' }}>
+              <span style={{ fontSize: 32, color: "gray" }}>
                 할 일을 등록해보세요.
               </span>
             </div>
+          ) : completeIsChecked ? (
+            showTodoList &&
+            showTodoList.map((data, idx) =>
+              data.isCompleted ? (
+                <Todo
+                  key={idx}
+                  id={data.id}
+                  idx={idx}
+                  checkId={"check" + data.id}
+                  completeColor="#dddddd"
+                />
+              ) : null
+            )
           ) : (
-            isAll &&
             showTodoList &&
             showTodoList.map((data, idx) => (
               <Todo
+                key={idx}
                 id={data.id}
                 idx={idx}
-                checkId={'check' + data.id}
+                checkId={"check" + data.id}
                 completeColor="#dddddd"
               />
             ))
           )}
-          {completedList.length === 0 && isCompleted ? (
+          {/* {completedList.length === 0 ? (
             <div
               style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
               }}
             >
-              <span style={{ fontSize: 32, color: 'gray' }}>
+              <span style={{ fontSize: 32, color: "gray" }}>
                 아직 완료한 일이 없습니다.
               </span>
             </div>
@@ -201,11 +228,11 @@ const Main = (props) => {
               <CompletedTodo
                 id={data.id}
                 idx={idx}
-                checkId={'completedCheck' + data.id}
+                checkId={"completedCheck" + data.id}
                 completeColor="#dddddd"
               />
             ))
-          )}
+          )} */}
         </ListContent>
       </ListView>
     </Container>

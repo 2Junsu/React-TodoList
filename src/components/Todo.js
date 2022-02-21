@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { changeCheck, deleteTodo } from '../redux/reducer/todo'
-import $ from 'jquery'
-import { Tag } from '../elements'
+import React, { useState } from "react"
+import styled from "styled-components"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { changeCheck, deleteTodo } from "../redux/reducer/todo"
+import $ from "jquery"
+import { Tag } from "../elements"
 
 const Todo = (props) => {
   const id = props.id
@@ -12,7 +12,7 @@ const Todo = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const data = useSelector(
-    (state) => state.reducer.todoList.filter((data) => data.id === id)[0],
+    (state) => state.reducer.todoList.filter((data) => data.id === id)[0]
   )
   const check = data.isCompleted //완료 여부
   const deadlineMilli = Date.parse(data.deadline)
@@ -38,26 +38,26 @@ const Todo = (props) => {
   }
 
   const deleteElement = () => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
       dispatch(deleteTodo(id))
-      alert('삭제되었습니다.')
+      alert("삭제되었습니다.")
       window.location.reload()
     }
   }
 
   const handleCheck = () => {
     //할 일 완료 여부 저장
-    if ($(`#${props.checkId}`).prop('checked'))
+    if ($(`#${props.checkId}`).prop("checked"))
       dispatch(
         changeCheck({
           id,
           isTrue: true,
-          completedTime: new Date().toLocaleString('en', {
-            timeZone: 'Asia/Seoul',
+          completedTime: new Date().toLocaleString("en", {
+            timeZone: "Asia/Seoul",
           }),
-        }),
+        })
       )
-    else dispatch(changeCheck({ id, isTrue: false, completedTime: '' }))
+    else dispatch(changeCheck({ id, isTrue: false, completedTime: "" }))
   }
 
   return (
@@ -80,24 +80,25 @@ const Todo = (props) => {
               <Title>{data.title}</Title>
             </TitleContainer>
             <Deadline>
-              {data.deadline.slice(0, -12).replaceAll('/', '.')}
+              {data.deadline.slice(0, -12).replaceAll("/", ".")}
             </Deadline>
           </TitleDeadline>
         </Left>
         <Buttons>
           <EditImg
             onClick={editElement}
-            src={require('../assets/images/edit.png')}
+            src={require("../assets/images/edit.png")}
           />
           <DeleteImg
             onClick={deleteElement}
-            src={require('../assets/images/delete.png')}
+            src={require("../assets/images/delete.png")}
           />
         </Buttons>
       </Container>
       <Tags>
-        {data.tags.map((data) => (
+        {data.tags.map((data, idx) => (
           <Tag
+            key={idx}
             name={data.name}
             bgColor={data.bgColor}
             fontColor={data.fontColor}
@@ -113,8 +114,8 @@ const Wrap = styled.div`
   flex-direction: column;
   border: 2px solid
     ${(props) =>
-      props.check ? props.completeColor : props.isSoon ? 'red' : 'skyblue'};
-  color: ${(props) => (props.check ? props.completeColor : 'black')};
+      props.check ? props.completeColor : props.isSoon ? "red" : "skyblue"};
+  color: ${(props) => (props.check ? props.completeColor : "black")};
   border-radius: 8px;
   width: 700px;
   padding: 15px;
