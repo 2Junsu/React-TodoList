@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-import { Header, Tag, Button } from '../elements'
-import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import DatePicker from 'react-datepicker'
-import { Modal, TagModal } from '../components'
-import $ from 'jquery'
-import { addTag, changeModal, editTodo } from '../redux/reducer/todo'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react"
+import styled from "styled-components"
+import { Header, Tag, Button } from "../elements"
+import { useParams } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import DatePicker from "react-datepicker"
+import { Modal, TagModal } from "../components"
+import $ from "jquery"
+import { addTag, changeModal, editTodo } from "../redux/reducer/todo"
+import { useNavigate } from "react-router-dom"
 
 const EditTodo = (props) => {
   const type = props.type
@@ -19,13 +19,13 @@ const EditTodo = (props) => {
   const tags = useSelector((state) => state.reducer.tags)
   const modalTitleOpen = useSelector((state) => state.reducer.modalOpen.title)
   const modalContentOpen = useSelector(
-    (state) => state.reducer.modalOpen.content,
+    (state) => state.reducer.modalOpen.content
   )
   const tagModalOpen = useSelector((state) => state.reducer.modalOpen.tag)
 
   //최종 변경 시 리덕스에 저장될 값
-  const [title, setTitle] = useState(localStorage.getItem('changeTitle'))
-  const [content, setContent] = useState(localStorage.getItem('changeContent'))
+  const [title, setTitle] = useState(localStorage.getItem("changeTitle"))
+  const [content, setContent] = useState(localStorage.getItem("changeContent"))
   const [date, setDate] = useState(new Date()) //변경된 마감 목표일
   const [isCalOpened, setIsCalOpened] = useState(false)
 
@@ -51,36 +51,36 @@ const EditTodo = (props) => {
       title,
       content,
       tags,
-      deadline: date.toLocaleString('en', { timeZone: 'Asia/Seoul' }),
-      editDate: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
+      deadline: date.toLocaleString("en", { timeZone: "Asia/Seoul" }),
+      editDate: new Date().toLocaleString("en", { timeZone: "Asia/Seoul" }),
     }
     dispatch(editTodo(submitData))
-    alert('수정이 완료되었습니다.')
+    alert("수정이 완료되었습니다.")
 
-    localStorage.setItem('changeTitle', '')
-    localStorage.setItem('changeContent', '')
-    navigate('/')
+    localStorage.setItem("changeTitle", "")
+    localStorage.setItem("changeContent", "")
+    navigate("/")
     window.location.reload()
   }
 
   const cancel = () => {
     //수정 취소
-    localStorage.setItem('changeTitle', '')
-    localStorage.setItem('changeContent', '')
-    navigate('/')
+    localStorage.setItem("changeTitle", "")
+    localStorage.setItem("changeContent", "")
+    navigate("/")
   }
 
   useEffect(() => {
     //마감 목표일 변경 클릭 시 달력 UI open
-    if (isCalOpened) $('#calendar').show()
-    else $('#calendar').hide()
+    if (isCalOpened) $("#calendar").show()
+    else $("#calendar").hide()
   }, [isCalOpened])
 
   useEffect(() => {
     //처음 랜더링될 때 로컬스토리지 값 설정
     //tag 변경을 위해 리덕스에 접근
-    localStorage.setItem('changeTitle', data.title)
-    localStorage.setItem('changeContent', data.content)
+    localStorage.setItem("changeTitle", data.title)
+    localStorage.setItem("changeContent", data.content)
 
     data.tags.forEach((data) => {
       dispatch(addTag(data))
@@ -90,11 +90,11 @@ const EditTodo = (props) => {
   useEffect(() => {
     //로컬스토리지 값이 바뀔 때마다(제목이나 설명을 변경할 때마다)
     //화면에 보이는 값 변경
-    setTitle(localStorage.getItem('changeTitle'))
-    setContent(localStorage.getItem('changeContent'))
+    setTitle(localStorage.getItem("changeTitle"))
+    setContent(localStorage.getItem("changeContent"))
   }, [
-    localStorage.getItem('changeTitle'),
-    localStorage.getItem('changeContent'),
+    localStorage.getItem("changeTitle"),
+    localStorage.getItem("changeContent"),
   ])
 
   return (
@@ -115,7 +115,7 @@ const EditTodo = (props) => {
           <Button
             margin="0px 10px"
             onClick={() => {
-              openModal('title')
+              openModal("title")
             }}
           >
             할 일 제목 변경
@@ -134,7 +134,7 @@ const EditTodo = (props) => {
         <div style={{ marginTop: 20 }}>
           <Button
             onClick={() => {
-              openModal('content')
+              openModal("content")
             }}
           >
             상세설명 변경
@@ -151,11 +151,11 @@ const EditTodo = (props) => {
         </div>
         <TagContainer>
           <ChangeView>
-            <span style={{ fontSize: 24, fontWeight: 'bold' }}>태그</span>
+            <span style={{ fontSize: 24, fontWeight: "bold" }}>태그</span>
             <Button
               margin="0px 10px"
               onClick={() => {
-                openModal('tag')
+                openModal("tag")
               }}
             >
               태그 추가
@@ -199,7 +199,7 @@ const Container = styled.div`
   width: 60%;
   margin-top: 30px;
   padding: 30px;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
 `
 const ChangeView = styled.div`

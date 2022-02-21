@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Tag, Button, Header } from '../elements'
-import { TagModal } from '../components'
-import { useDispatch, useSelector } from 'react-redux'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import { addTodo, changeModal, clearTags } from '../redux/reducer/todo'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react"
+import styled from "styled-components"
+import { Tag, Button, Header } from "../elements"
+import { TagModal } from "../components"
+import { useDispatch, useSelector } from "react-redux"
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { addTodo, changeModal, clearTags } from "../redux/reducer/todo"
+import { useNavigate } from "react-router-dom"
 
 const AddTodo = (props) => {
   const type = props.type
@@ -17,14 +17,14 @@ const AddTodo = (props) => {
 
   const [date, setDate] = useState(new Date())
   const [form, setForm] = useState({
-    title: '',
-    content: '',
+    title: "",
+    content: "",
     tags: [],
-    deadline: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
-    date: new Date().toLocaleString('en', { timeZone: 'Asia/Seoul' }),
-    editDate: '',
+    deadline: new Date().toLocaleString("en", { timeZone: "Asia/Seoul" }),
+    date: new Date().toLocaleString("en", { timeZone: "Asia/Seoul" }),
+    editDate: "",
     isCompleted: false,
-    completedTime: '',
+    completedTime: "",
     id: new Date().getTime(),
   })
 
@@ -44,19 +44,19 @@ const AddTodo = (props) => {
 
   const onSubmit = () => {
     //유효성 검증 후 리덕스에 할 일 추가
-    if (form.title === '' || form.content === '')
-      alert('입력되지 않은 정보가 있습니다.')
+    if (form.title === "" || form.content === "")
+      alert("입력되지 않은 정보가 있습니다.")
     else {
       dispatch(addTodo(form))
       dispatch(clearTags())
-      alert('할 일이 등록되었습니다.')
-      navigate('/')
+      alert("할 일이 등록되었습니다.")
+      navigate("/")
     }
   }
 
   const openModal = () => {
     //modal창 open
-    dispatch(changeModal({ state: true, type: 'tag' }))
+    dispatch(changeModal({ state: true, type: "tag" }))
   }
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const AddTodo = (props) => {
     //마감 목표일이 변경될 때마다 리덕스에 들어갈 deadline 변경
     const changed = {
       ...form,
-      deadline: date.toLocaleString('en', { timeZone: 'Asia/Seoul' }), //리덕스는 직렬화가 가능한 값을 권장하므로 객체->문자열로 변환
+      deadline: date.toLocaleString("en", { timeZone: "Asia/Seoul" }), //리덕스는 직렬화가 가능한 값을 권장하므로 객체->문자열로 변환
     }
     setForm(changed)
   }, [date])
@@ -80,17 +80,17 @@ const AddTodo = (props) => {
   //뒤로가기 감지
   window.onpopstate = (e) => {
     if (
-      window.confirm('입력 중인 내용이 삭제되고, 메인 페이지로 이동합니다.')
+      window.confirm("입력 중인 내용이 삭제되고, 메인 페이지로 이동합니다.")
     ) {
-      navigate('/')
+      navigate("/")
     }
   }
 
   useEffect(() => {
     //브라우저 닫으려고 할 때 알림
-    window.addEventListener('beforeunload', (e) => {
+    window.addEventListener("beforeunload", (e) => {
       e.preventDefault()
-      e.returnValue = ''
+      e.returnValue = ""
     })
   }, [])
 
@@ -147,7 +147,7 @@ const TitleInput = styled.input`
   width: 700px;
   padding: 10px;
   font-size: 24px;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
 `
 const ContentInput = styled.textarea`
@@ -157,7 +157,7 @@ const ContentInput = styled.textarea`
   padding: 10px;
   font-size: 20px;
   font-family: sans-serif;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
 `
 const TagContainer = styled.div`
@@ -172,7 +172,7 @@ const Tags = styled.div`
   margin-top: 10px;
   display: flex;
   flex-wrap: wrap;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
   padding: 20px;
 `

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { changeCheck, deleteTodo } from "../redux/reducer/todo"
 import $ from "jquery"
-import { Tag } from "../elements"
+import { Button, Tag } from "../elements"
 
 const Todo = (props) => {
   const id = props.id
@@ -69,29 +69,33 @@ const Todo = (props) => {
     >
       <Container>
         <Left>
+          <TitleDeadline>
+            <TitleContainer check={check}>
+              <Title>{data.title}</Title>
+            </TitleContainer>
+            <Deadline>
+              {data.deadline.split(",")[0].replaceAll("/", ".")}
+            </Deadline>
+          </TitleDeadline>
+        </Left>
+        <Buttons>
+          <div
+            style={{ marginRight: 15, display: "flex", alignItems: "center" }}
+          >
+            <EditImg
+              onClick={editElement}
+              src={require("../assets/images/edit.png")}
+            />
+            <DeleteImg
+              onClick={deleteElement}
+              src={require("../assets/images/delete.png")}
+            />
+          </div>
           <Checkbox
             type="checkbox"
             id={props.checkId}
             onChange={handleCheck}
             checked={check}
-          />
-          <TitleDeadline>
-            <TitleContainer onClick={onClick}>
-              <Title>{data.title}</Title>
-            </TitleContainer>
-            <Deadline>
-              {data.deadline.slice(0, -12).replaceAll("/", ".")}
-            </Deadline>
-          </TitleDeadline>
-        </Left>
-        <Buttons>
-          <EditImg
-            onClick={editElement}
-            src={require("../assets/images/edit.png")}
-          />
-          <DeleteImg
-            onClick={deleteElement}
-            src={require("../assets/images/delete.png")}
           />
         </Buttons>
       </Container>
@@ -106,25 +110,34 @@ const Todo = (props) => {
           />
         ))}
       </Tags>
+      <Detail>
+        <Button onClick={onClick}>자세히</Button>
+      </Detail>
     </Wrap>
   )
 }
-const Wrap = styled.div`
+const Wrap = styled.details`
   display: flex;
   flex-direction: column;
+  align-items: center;
   border: 2px solid
     ${(props) =>
-      props.check ? props.completeColor : props.isSoon ? "red" : "skyblue"};
+      props.check
+        ? props.completeColor
+        : props.isSoon
+        ? "red"
+        : props.theme.mainColor};
   color: ${(props) => (props.check ? props.completeColor : "black")};
   border-radius: 8px;
   width: 700px;
   padding: 15px;
   margin: 5px 0px;
 `
-const Container = styled.div`
+const Container = styled.summary`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 `
 const Tags = styled.div`
   display: flex;
@@ -136,6 +149,7 @@ const Left = styled.div`
 `
 const Buttons = styled.div`
   display: flex;
+  align-items: center;
 `
 const EditImg = styled.img`
   width: 25px;
@@ -158,6 +172,7 @@ const TitleDeadline = styled.div`
   align-items: center;
 `
 const TitleContainer = styled.div`
+  text-decoration: ${(props) => (props.check ? "line-through" : "")};
   width: 450px;
   margin-left: 10px;
   overflow: auto;
@@ -173,5 +188,11 @@ const Title = styled.span`
 const Deadline = styled.span`
   font-size: 16px;
   color: gray;
+`
+const Detail = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 `
 export default Todo
