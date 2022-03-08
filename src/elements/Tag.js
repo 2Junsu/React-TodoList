@@ -1,26 +1,24 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
-import { deleteTag } from '../redux/reducer/todo'
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { deleteTag } from '../redux/reducer/todo';
 
 const Tag = (props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const onClick = () => {
-    dispatch(deleteTag(props.id))
-  }
+    dispatch(deleteTag(props.id));
+  };
 
   return (
     <Container {...props} onClick={onClick}>
       <Name>{props.name}</Name>
       <Date>{props.date}</Date>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
-  width: 80px;
-  height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,16 +31,13 @@ const Container = styled.div`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 const Name = styled.div`
   width: 100%;
-  //display: flex;
   overflow-x: auto;
-`
+`;
 const Date = styled.div`
   width: 100%;
-  //display: flex;
-  overflow-x: scroll;
   margin-top: 5px;
-`
-export default Tag
+`;
+export default Tag;

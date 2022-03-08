@@ -1,51 +1,40 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit"
 
 const todoReducer = createSlice({
-  name: 'todoReducer',
+  name: "todoReducer",
   initialState: {
     todoList:
-      JSON.parse(localStorage.getItem('todoList')) === null
+      JSON.parse(localStorage.getItem("todoList")) === null
         ? []
-        : JSON.parse(localStorage.getItem('todoList')),
-    completedList:
-      JSON.parse(localStorage.getItem('completedList')) === null
-        ? []
-        : JSON.parse(localStorage.getItem('completedList')),
+        : JSON.parse(localStorage.getItem("todoList")),
     modalOpen: { tag: false, title: false, content: false },
     tags: [],
     allTags:
-      JSON.parse(localStorage.getItem('allTags')) === null
+      JSON.parse(localStorage.getItem("allTags")) === null
         ? []
-        : JSON.parse(localStorage.getItem('allTags')),
+        : JSON.parse(localStorage.getItem("allTags")),
   },
   reducers: {
     addTodo: (state, action) => {
       //할 일 추가
       state.todoList.push(action.payload)
-      localStorage.setItem('todoList', JSON.stringify(state.todoList))
+      localStorage.setItem("todoList", JSON.stringify(state.todoList))
 
       //태그 정보 저장을 위해 allTags에 태그 추가
       action.payload.tags.forEach((data) => {
         state.allTags.push(data)
       })
 
-      localStorage.setItem('allTags', JSON.stringify(state.allTags))
+      localStorage.setItem("allTags", JSON.stringify(state.allTags))
     },
     deleteTodo: (state, action) => {
       //할 일 삭제
       const list = state.todoList.filter((data) => data.id !== action.payload)
-      localStorage.setItem('todoList', JSON.stringify(list))
-
-      //완료된 할 일 리스트에도 삭제 적용
-      let completedList = state.completedList
-      completedList = state.completedList.filter(
-        (data) => data.id !== action.payload,
-      )
-      localStorage.setItem('completedList', JSON.stringify(completedList))
+      localStorage.setItem("todoList", JSON.stringify(list))
 
       //해당 할 일에 등록된 태그를 allTags에서도 삭제
       const deleteList = state.todoList.filter(
-        (data) => data.id === action.payload,
+        (data) => data.id === action.payload
       )
 
       //삭제할 태그들
@@ -60,19 +49,18 @@ const todoReducer = createSlice({
         })
       })
 
-      localStorage.setItem('allTags', JSON.stringify(allTags))
+      localStorage.setItem("allTags", JSON.stringify(allTags))
 
       return {
         ...state,
         todoList: list,
-        completedList,
         allTags,
       }
     },
     deleteCompletedTodo: (state, action) => {
       //완료된 할 일 일괄 삭제
       const list = state.todoList.filter((data, idx) => !data.isCompleted)
-      localStorage.setItem('todoList', JSON.stringify(list))
+      localStorage.setItem("todoList", JSON.stringify(list))
 
       //해당 할 일에 등록된 태그를 allTags에서도 삭제
       const deleteList = state.todoList.filter((data) => data.isCompleted)
@@ -95,7 +83,7 @@ const todoReducer = createSlice({
         })
       })
 
-      localStorage.setItem('allTags', JSON.stringify(allTags))
+      localStorage.setItem("allTags", JSON.stringify(allTags))
 
       return {
         ...state,
@@ -116,7 +104,7 @@ const todoReducer = createSlice({
           data.tags = list.tags
         }
       })
-      localStorage.setItem('todoList', JSON.stringify(state.todoList))
+      localStorage.setItem("todoList", JSON.stringify(state.todoList))
 
       //태그가 바뀌었으면 allTags 변경
       let allTags = []
@@ -126,16 +114,7 @@ const todoReducer = createSlice({
         })
       })
       state.allTags = [...allTags]
-      localStorage.setItem('allTags', JSON.stringify(state.allTags))
-    },
-    filterOnlyCompleted: (state, action) => {
-      //완료된 할 일만 필터링
-      const list = state.todoList.filter((data, idx) => data.isCompleted)
-      localStorage.setItem('completedList', JSON.stringify(list))
-      return {
-        ...state,
-        completedList: list,
-      }
+      localStorage.setItem("allTags", JSON.stringify(state.allTags))
     },
     changeCheck: (state, action) => {
       //완료했는지 여부 체크
@@ -146,14 +125,7 @@ const todoReducer = createSlice({
         }
       })
 
-      //완료된 할 일 리스트에도 적용
-      state.completedList.forEach((data, idx) => {
-        if (data.id === action.payload.id)
-          data.isCompleted = action.payload.isTrue
-      })
-
-      localStorage.setItem('todoList', JSON.stringify(state.todoList))
-      localStorage.setItem('completedList', JSON.stringify(state.completedList))
+      localStorage.setItem("todoList", JSON.stringify(state.todoList))
     },
     changeModal: (state, action) => {
       //모달창 open 여부 관리
@@ -185,7 +157,6 @@ export const {
   deleteTodo,
   deleteCompletedTodo,
   editTodo,
-  filterOnlyCompleted,
   changeCheck,
   changeModal,
   addTag,

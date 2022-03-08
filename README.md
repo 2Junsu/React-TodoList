@@ -6,16 +6,17 @@
 * LocalStorage를 사용하여 브라우저창을 닫았다가 다시 열어도 데이터가 남아있도록 구현했습니다.
 
 ### 1. 메인 페이지
-<img width="250" alt="스크린샷 2022-02-11 오전 6 13 14" src="https://user-images.githubusercontent.com/77619905/153497304-d2297adc-1764-4773-b4a8-f5c6aaaa98b5.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 14 17" src="https://user-images.githubusercontent.com/77619905/153497449-fdbcd5a7-afd7-4882-bd56-9656f51dad01.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 14 55" src="https://user-images.githubusercontent.com/77619905/153497563-db97f68d-ec9f-4840-b17a-a49a3e573da3.png">
-* 메인 페이지의 각 할 일에는 제목, 마감 목표일, 태그 정보가 나타납니다.
-* 체크박스를 누르면 테두리 및 글씨 색이 회색으로 바뀌면서 완료 표시를 하며, 완료된 일만 필터링하여 볼 수도 있습니다.
+<img width="250" alt="스크린샷 2022-02-23 오전 1 30 04" src="https://user-images.githubusercontent.com/77619905/155175809-f2e7c7d1-f64a-46d1-92a3-aafbf9f7c488.png"> <img width="250" alt="스크린샷 2022-02-23 오전 1 28 56" src="https://user-images.githubusercontent.com/77619905/155175611-9d702d31-41de-4694-9e7d-a2545ae8f563.png"> <img width="250" alt="스크린샷 2022-02-23 오전 1 31 14" src="https://user-images.githubusercontent.com/77619905/155176010-f4d21237-2c50-4aa3-a22e-46affa17b4ed.png">
+
+* 메인 페이지의 각 할 일에는 제목, 마감 목표일이 나타나며, 해당 할 일을 누르면 태그 정보까지 볼 수 있습니다.
+* 완료한 일들은 체크박스를 누름으로써 관리하며, 완료된 일만 필터링하여 볼 수도 있습니다.
 * 완료하지 않은 일 중에 마감 목표일이 3일 이내인 일은 테두리가 빨간색으로 바뀌면서 긴급하다는 것을 알립니다.
 * 완료된 일을 일괄 삭제할 수 있습니다.
 * 할 일을 삭제할 수 있고, 이때 정말로 삭제할 것인지 사용자에게 되묻습니다.
 * 생성일, 마감 목표일, 태그 별로도 정렬 및 필터링이 가능합니다.
 ---
 ### 2. 할 일 입력 페이지
-<img width="250" alt="스크린샷 2022-02-11 오전 5 58 47" src="https://user-images.githubusercontent.com/77619905/153495329-01408f7f-dc54-467f-8068-2e1546e08408.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 02 33" src="https://user-images.githubusercontent.com/77619905/153495854-7e8f5293-de93-42b7-a19a-c8c94e0f1fb7.png"> <img width="250" alt="스크린샷 2022-02-11 오전 6 03 36" src="https://user-images.githubusercontent.com/77619905/153496012-baf45d58-fc40-4f43-8672-7d46c08521bb.png">
+<img width="250" alt="스크린샷 2022-02-23 오전 1 33 15" src="https://user-images.githubusercontent.com/77619905/155176406-d894a455-c678-477d-9b17-0133216e5eae.png"> <img width="250" alt="스크린샷 2022-02-23 오전 1 33 51" src="https://user-images.githubusercontent.com/77619905/155176506-6b1929fd-6394-4f52-951f-ce75bfb6a459.png"> <img width="250" alt="스크린샷 2022-02-23 오전 1 34 34" src="https://user-images.githubusercontent.com/77619905/155176632-0fb6eaea-1536-4e07-83d5-c5dca653dbd6.png">
 
 * 제목, 상세 설명, 태그, 마감 목표일을 설정할 수 있습니다.
 * 입력창에 autoFocus를 줌으로써 사용자가 조금이나마 편리하게 입력할 수 있도록 하였습니다.
@@ -27,14 +28,14 @@
 * 뒤로 가거나 창을 닫을 때, 혹은 새로고침할 때 alert를 띄웠습니다.
 ---
 ### 3. 할 일 상세 페이지
-<img width="350" alt="스크린샷 2022-02-11 오전 6 24 46" src="https://user-images.githubusercontent.com/77619905/153498998-0deb17ec-3984-4dfb-8a19-892726f4a6e3.png"> <img width="350" alt="스크린샷 2022-02-11 오전 6 25 29" src="https://user-images.githubusercontent.com/77619905/153499091-5852fab5-9332-4d64-ad26-5a65409f6aa6.png">
+<img width="350" alt="스크린샷 2022-02-23 오전 1 36 22" src="https://user-images.githubusercontent.com/77619905/155176979-b6ce9aed-051e-4063-ac61-c5194bd7eef7.png"> <img width="350" alt="스크린샷 2022-02-23 오전 1 37 43" src="https://user-images.githubusercontent.com/77619905/155177223-0dd9211c-f920-4729-a1c2-77c4653cadf1.png">
 
-* 할 일의 제목을 누르면 상세 페이지로 넘어옵니다.
+* 할 일을 펼쳐서 '자세히'를 누르면 상세 페이지로 넘어옵니다.
 * 등록할 때 입력했던 정보와 더불어서 수정일 및 완료일도 표시가 됩니다.
 * 아직 수정을 하지 않았거나 완료를 하지 않았다면 일자가 뜨지 않습니다.
 ---
 ### 4. 할 일 수정 페이지
-<img width="500" alt="스크린샷 2022-02-11 오전 6 28 19" src="https://user-images.githubusercontent.com/77619905/153499474-0e2e45e9-c1f5-426a-b641-73aa8141022b.png">
+<img width="500" alt="스크린샷 2022-02-23 오전 1 39 57" src="https://user-images.githubusercontent.com/77619905/155177630-a4ab3957-e46d-4313-bf4b-e9e7587a2e6a.png">
 
 * 마감 목표일, 제목, 상세 설명, 태그를 변경할 수 있습니다.
 * 등록된 태그를 클릭하면 해당 태그가 삭제됩니다.

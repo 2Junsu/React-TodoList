@@ -1,8 +1,8 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Header, Tag } from '../elements'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import React from "react"
+import styled from "styled-components"
+import { Header, Tag } from "../elements"
+import { useParams } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const Detail = (props) => {
   const type = props.type
@@ -16,23 +16,23 @@ const Detail = (props) => {
       <Header type={type} />
       <Container>
         <Deadline>
-          마감 목표일 : {data.deadline.slice(0, -12).replaceAll('/', '.')}
+          마감 목표일 : {data.deadline.slice(0, -12).replaceAll("/", ".")}
         </Deadline>
         <Title>{data.title}</Title>
         <DateContainer>
-          <Date>생성일 : {data.date.replaceAll('/', '.')}</Date>
-          <EditDate>수정일 : {data.editDate.replaceAll('/', '.')}</EditDate>
+          <Date>생성일 : {data.date.replaceAll("/", ".")}</Date>
+          <EditDate>수정일 : {data.editDate.replaceAll("/", ".")}</EditDate>
           <CompleteDate>
             {isCompleted
-              ? `완료일 : ${completedTime.replaceAll('/', '.')}`
-              : '아직 완료하지 않은 일입니다.'}
+              ? `완료일 : ${completedTime.replaceAll("/", ".")}`
+              : "아직 완료하지 않은 일입니다."}
           </CompleteDate>
         </DateContainer>
         <ContentContainer>
           <Content>{data.content}</Content>
         </ContentContainer>
         <TagContainer>
-          <span style={{ fontSize: 24, fontWeight: 'bold' }}>태그</span>
+          <span style={{ fontSize: 24, fontWeight: "bold" }}>태그</span>
           <Tags>
             {data.tags.map((data) => (
               <Tag
@@ -61,7 +61,7 @@ const Container = styled.div`
   width: 60%;
   margin-top: 30px;
   padding: 30px;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
 `
 const Title = styled.span`

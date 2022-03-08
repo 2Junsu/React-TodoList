@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import ModalComponent from 'react-modal'
-import { SwatchesPicker } from 'react-color'
-import $ from 'jquery'
-import { Button } from '../elements'
-import { useDispatch, useSelector } from 'react-redux'
-import { changeModal, addTag } from '../redux/reducer/todo'
+import React, { useEffect, useState } from "react"
+import styled from "styled-components"
+import ModalComponent from "react-modal"
+import { SwatchesPicker } from "react-color"
+import $ from "jquery"
+import { Button } from "../elements"
+import { useDispatch, useSelector } from "react-redux"
+import { changeModal, addTag } from "../redux/reducer/todo"
+import theme from "../theme"
 
 const TagModal = (props) => {
   const dispatch = useDispatch()
@@ -13,9 +14,9 @@ const TagModal = (props) => {
   const tags = useSelector((state) => state.reducer.tags)
   const allTags = useSelector((state) => state.reducer.allTags)
 
-  const [tagName, setTagName] = useState('')
-  const [bgColor, setBgColor] = useState('white')
-  const [fontColor, setFontColor] = useState('black')
+  const [tagName, setTagName] = useState("")
+  const [bgColor, setBgColor] = useState("white")
+  const [fontColor, setFontColor] = useState("black")
   const date = new Date().toLocaleDateString()
 
   const [bgPaletteClicked, setBgPaletteClicked] = useState(false)
@@ -48,16 +49,16 @@ const TagModal = (props) => {
 
   const closeModal = () => {
     //modal창 close
-    dispatch(changeModal({ state: false, type: 'tag' }))
+    dispatch(changeModal({ state: false, type: "tag" }))
     setBgPaletteClicked(false)
     setFontPaletteClicked(false)
-    setTagName('')
+    setTagName("")
   }
 
   const onsubmit = () => {
-    if (tagName === '') {
+    if (tagName === "") {
       //태그를 꼭 입력하도록 유효성 검증
-      alert('태그를 입력하세요.')
+      alert("태그를 입력하세요.")
     } else {
       //현재 등록창 내에 중복된 태그가 존재하는지 확인 후에 태그 등록
       let duplicate = false
@@ -76,8 +77,8 @@ const TagModal = (props) => {
         if (data.bgColor === bgColor) colorDuplicate = true
       })
 
-      if (duplicate) alert('같은 이름의 태그가 이미 존재합니다.')
-      else if (colorDuplicate) alert('같은 색의 태그가 이미 존재합니다.')
+      if (duplicate) alert("같은 이름의 태그가 이미 존재합니다.")
+      else if (colorDuplicate) alert("같은 색의 태그가 이미 존재합니다.")
       else {
         //전체 할 일들에 등록된 태그 중에 겹치는 태그가 있으면 현재 태그를 기존 태그의 색 및 생성일로 변경
         allTags.forEach((data) => {
@@ -89,14 +90,14 @@ const TagModal = (props) => {
                 bgColor: data.bgColor,
                 date: data.date,
                 id: new Date().getTime(),
-              }),
+              })
             )
             alert(
-              '기존의 태그가 존재하므로 색상과 생성일이 자동으로 변경됩니다.',
+              "기존의 태그가 존재하므로 색상과 생성일이 자동으로 변경됩니다."
             )
             allTagDuplicate = true
             closeModal()
-            setTagName('')
+            setTagName("")
             return
           }
         })
@@ -106,7 +107,7 @@ const TagModal = (props) => {
         if (!allTagDuplicate) {
           allTags.forEach((data) => {
             if (data.bgColor === bgColor) {
-              alert('해당 배경색을 가진 태그가 이미 존재합니다.')
+              alert("해당 배경색을 가진 태그가 이미 존재합니다.")
               allColorDuplicate = true
               return
             }
@@ -119,10 +120,10 @@ const TagModal = (props) => {
                 bgColor,
                 date,
                 id: new Date().getTime(),
-              }),
+              })
             )
             closeModal()
-            setTagName('')
+            setTagName("")
           }
         }
       }
@@ -133,16 +134,16 @@ const TagModal = (props) => {
     //배경색 지정 팔레트와 글자색 지정 팔레트가 중복해서 열리지 않게 구현
     if (bgPaletteClicked) {
       if (fontPaletteClicked) setFontPaletteClicked(false)
-      $('#bgPalette').show()
-    } else $('#bgPalette').hide()
+      $("#bgPalette").show()
+    } else $("#bgPalette").hide()
   }, [bgPaletteClicked])
 
   useEffect(() => {
     //배경색 지정 팔레트와 글자색 지정 팔레트가 중복해서 열리지 않게 구현
     if (fontPaletteClicked) {
       if (bgPaletteClicked) setBgPaletteClicked(false)
-      $('#fontPalette').show()
-    } else $('#fontPalette').hide()
+      $("#fontPalette").show()
+    } else $("#fontPalette").hide()
   }, [fontPaletteClicked])
 
   return (
@@ -151,22 +152,22 @@ const TagModal = (props) => {
       onRequestClose={closeModal}
       style={{
         overlay: {
-          position: 'fixed',
+          position: "fixed",
           top: 0,
           left: 0,
         },
         content: {
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          top: 'calc(50% - 250px)',
-          left: 'calc(50% - 150px)',
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          top: "calc(50% - 250px)",
+          left: "calc(50% - 150px)",
           width: 300,
           height: 500,
           borderRadius: 8,
-          border: '3px solid skyblue',
-          backgroundColor: 'white',
+          border: `3px solid ${theme.mainColor}`,
+          backgroundColor: "white",
         },
       }}
     >
@@ -208,7 +209,7 @@ const Name = styled.input`
   width: 80%;
   font-size: 20px;
   padding: 10px;
-  border: 2px solid skyblue;
+  border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 8px;
 `
 const Buttons = styled.div`
